@@ -23,7 +23,7 @@ class PurchaseController {
   }
 
   async approve (req, res) {
-    const { ad, user } = await Purchase.findById(req.params.id).populate('ad')
+    const { ad } = await Purchase.findById(req.params.id).populate('ad')
 
     if (ad.purchasedBy) {
       return res.status(400).json({ error: 'Ad already been purchased' })
@@ -33,7 +33,7 @@ class PurchaseController {
       return res.status(401).json({ error: "You're not the ad author" })
     }
 
-    ad.purchasedBy = user._id
+    ad.purchasedBy = req.params.id
 
     await ad.save()
 
